@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: octopus-applications
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - plugin:
+        requeueAfterSeconds: 20
+        configMapRef:
+          name: applicationset-octopus
+        input:
+          parameters:
+            projects: ["order-processing-frontend", "order-processing-backend"]
+  template:
+    metadata:
+      name: "octopus-{{ .project.slug }}-{{ .environment.slug }}"
+      annotations:
+        octopus.com/project: "{{ .project.slug }}"
+        octopus.com/environment: "{{ .environment.slug }}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/argoproj/argocd-example-apps.git
+        path: .
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: default
