@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: octopus-projects
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: applicationset-octopus
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: argocd
+stringData:
+  token: "supersecret-ApiToken"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: applicationset-octopus
+  namespace: argocd
+data:
+  token: "$applicationset-octopus:token"
+  baseUrl: "http://host.docker.internal:3412"
+  requestTimeout: "20"
