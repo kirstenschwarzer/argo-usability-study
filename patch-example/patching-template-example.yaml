@@ -1,17 +1,6 @@
-apiVersion: octopus.com/v1beta1
-kind: PatchingTemplate
-metadata:
-  name: base-helm                     # any valid k8s name
-spec:<!
-  promotion:                         #  update defined fields in the files with new values or Octopus variables
-    Chart.yaml:
-      jsonPaths:
-      - $.appVersion = '2.12'
-      - $.version = #{issue.Id}
-      - $.dependencies = #{dependencies}
-    values.yaml:
-      jsonPaths:
-      - $..image = #{container.tag}
-    requirements.yaml:
-      jsonPaths:
-      - "$.dependencies" = #{dependencies}
+spec:
+  template:
+    spec:
+      containers:
+      - name: patch-example-ctr-2
+        image: redis
