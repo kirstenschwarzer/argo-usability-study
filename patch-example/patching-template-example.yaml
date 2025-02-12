@@ -1,6 +1,7 @@
+# Use JSONPath merge to specify the fields to patch and their new values
 spec:
   template:
     spec:
       containers:
       - name: patch-example-ctr-2
-        image: redis
+        image: redis # Provide a new value or use Octopus variables e.g. #{variable}
